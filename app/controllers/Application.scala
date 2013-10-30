@@ -89,14 +89,15 @@ object Application extends Controller {
     content.text
   }
 
-  private def getClaimsAsCookies() = {
+  private def getClaimsAsCookies():Seq[(String, String)] = {
     Option(AmbientDataContext.getCurrentClaimStore) match {
       case Some(cs) => {
-        val serializedCookies = serializeClaims(cs.getAll()).map(cookie => {
+        val claimCookieSerializer = new ClaimCookieSerializer("TAFContext")
+        val serializedClaims = claimCookieSerializer.serializeClaims(cs.getAll())
+
+        serializedClaims.map(cookie => {
           ("Cookie", cookie.getName + "=\"" + new String(cookie.getValue) + "\"")
         })
-
-        serializedCookies
       }
       case None => {
         Logger.error("No claimstore, nothing to serialize")
@@ -105,7 +106,5 @@ object Application extends Controller {
     }
   }
 
-  private def serializeClaims(claims:mutable.Map[URI, AnyRef]):java.util.List[ClaimsCookie] = {
-     new ClaimCookieSerializer("TAFContext").serializeClaims(claims)
-  }
+
 }

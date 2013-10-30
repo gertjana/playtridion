@@ -1,6 +1,5 @@
 import sbt._
 import Keys._
-import play.Project._
 import com.github.play2war.plugin._
 
 object ApplicationBuild extends Build {

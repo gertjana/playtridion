@@ -19,3 +19,4 @@ test-result
 server.pid
 *.iml
 *.eml
+war
